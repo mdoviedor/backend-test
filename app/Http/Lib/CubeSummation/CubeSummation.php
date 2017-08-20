@@ -24,11 +24,18 @@ class CubeSummation
      */
     protected $driver;
 
+    /**
+     * CubeSummation constructor.
+     * @param DataDriverInterface $driver
+     */
     public function __construct(DataDriverInterface $driver)
     {
         $this->driver = $driver;
     }
 
+    /**
+     * @return array
+     */
     public function get(): array
     {
         $this->run();
@@ -36,7 +43,7 @@ class CubeSummation
         return $this->data;
     }
 
-    protected function run()
+    protected function run(): void
     {
         $this->loadDependencies();
 
