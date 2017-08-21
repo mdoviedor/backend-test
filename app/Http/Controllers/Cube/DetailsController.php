@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cube;
 
 use App\Http\Controllers\Controller;
-use App\Test;
+use App\Models\Test;
 
 /**
  * Class DetailsController

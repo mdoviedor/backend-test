@@ -30,4 +30,26 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tests()
+    {
+        return $this->hasMany(Test::class);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Test
+     */
+    public function createTest(array $data)
+    {
+        $test = new Test($data);
+
+        $this->tests()->save($test);
+
+        return $test;
+    }
 }

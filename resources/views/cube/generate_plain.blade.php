@@ -1,18 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    {!! Form::open(['method' => 'POST', 'route' => 'cube_summation.generate_plain.execute']) !!}
+    <div class="container">
+        <h3>Tests
+            <small>New</small>
+        </h3>
+        <a class="btn btn-primary btn-lg" href="{{ route('cube.list') }}">
+            Inicio
+        </a>
 
-    {!! Field::textarea('cases') !!}                    
+        <hr>
 
-    <div class="form-group">
-        <div>
-            <button type="submit" class="btn btn-default">
-                @lang('validation.attributes.generate')
-            </button>
+        {!! Form::open(['method' => 'POST', 'route' => 'cube.generate_plain.execute']) !!}
+
+        {!! Field::textarea('cases') !!}
+
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn btn-default">
+                    @lang('validation.attributes.generate')
+                </button>
+            </div>
         </div>
+        {!! Form::close() !!}
     </div>
-    {!! Form::close() !!}
-</div>
 @endsection

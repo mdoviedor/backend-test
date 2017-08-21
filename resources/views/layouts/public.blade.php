@@ -72,7 +72,7 @@
             @if (Route::has('login'))
             <div class="top-right links">
                 @if (Auth::check())
-                <a href="{{ url('/cube_summation/list') }}">@lang('auth.attributes.home.title')</a>
+                <a href="{{ url('/cube/list') }}">@lang('auth.attributes.home.title')</a>
                 @else
                 <a href="{{ url('/login') }}">@lang('auth.attributes.login.title')</a>
                 <a href="{{ url('/register') }}">@lang('auth.attributes.register.title')</a>

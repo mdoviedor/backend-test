@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Cube;
 use App\Http\Controllers\Controller;
 use App\Http\Lib\CubeSummation\CubeSummation;
 use App\Http\Lib\CubeSummation\DataPlainDriver;
+use App\Repositories\CubeRepository;
+use App\Repositories\TestRepository;
 use Illuminate\Http\Request;
-use SebastianBergmann\RecursionContext\Exception;
 
 /**
  * Class GeneratePlainController
@@ -14,6 +15,25 @@ use SebastianBergmann\RecursionContext\Exception;
  */
 class GeneratePlainController extends Controller
 {
+    /**
+     * @var TestRepository
+     */
+    private $testRepository;
+    /**
+     * @var CubeRepository
+     */
+    private $cubeRepository;
+
+    /**
+     * GeneratePlainController constructor.
+     * @param TestRepository $testRepository
+     * @param CubeRepository $cubeRepository
+     */
+    public function __construct(TestRepository $testRepository, CubeRepository $cubeRepository)
+    {
+        $this->testRepository = $testRepository;
+        $this->cubeRepository = $cubeRepository;
+    }
 
     /**
      * @return mixed
@@ -38,18 +58,23 @@ class GeneratePlainController extends Controller
         $dataPlainDriver = new DataPlainDriver($data);
         $cubeSummation = new CubeSummation($dataPlainDriver);
 
+        $user = auth()->user();
+
         try {
             $response = $cubeSummation->get();
 
-            $test = auth()->user()->createTest([
-                'size' => $response['T'],
-            ]);
+            $test =  $this->testRepository->create($response['T'], $user);
+
+//            $test = auth()->user()->createTest([
+//                'size' => $response['T'],
+//            ]);
 
             foreach ($response['cases'] as $case) {
-                $cube = $test->createCube([
-                    'matrix_size' => $case['matrix_size'],
-                    'number_operations' => $case['number_operations'],
-                ]);
+                $cube =  $this->cubeRepository->create($test, $case['matrix_size'], $case['number_operations']);
+//                $cube = $test->createCube([
+//                    'matrix_size' => $case['matrix_size'],
+//                    'number_operations' => $case['number_operations'],
+//                ]);
 
                 foreach ($case['operation'] as $operation) {
                     $cube->createOperation($operation);
@@ -57,7 +82,7 @@ class GeneratePlainController extends Controller
             }
 
             return redirect()->route('cube.details', [$test->id]);
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             return redirect()->back()
                             ->withInput()
                             ->withErrors(['cases' => $exc->getMessage()]);
