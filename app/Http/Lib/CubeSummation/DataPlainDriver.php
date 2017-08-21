@@ -43,7 +43,7 @@ class DataPlainDriver implements DataDriverInterface
     {
         if (count($infoCase) !== 2) {
             throw new ErrorFormatInfoCaseException(sprintf('Formato de la información  del caso invalido.'
-                    .' Error en el caso %s', $caseNumber));
+                . ' Error en el caso %s', $caseNumber));
         }
 
         return true;
@@ -59,13 +59,13 @@ class DataPlainDriver implements DataDriverInterface
     {
         if ($infoOperation[0] === 'UPDATE' && count($infoOperation) !== 5) {
             throw new ErrorFormatInfoOperationException(sprintf('Formato de la información de la '
-                    .'operación UPDATE invalido. Error en el caso %s', $caseNumber));
+                . 'operación UPDATE invalido. Error en el caso %s', $caseNumber));
         } elseif ($infoOperation[0] === 'QUERY' && count($infoOperation) !== 7) {
             throw new ErrorFormatInfoOperationException(sprintf('Formato de la información de la '
-                    .'operación QUERY invalido. Error en el caso %s', $caseNumber));
+                . 'operación QUERY invalido. Error en el caso %s', $caseNumber));
         } elseif ($infoOperation[0] !== 'UPDATE' && $infoOperation[0] !== 'QUERY') {
             throw new ErrorFormatInfoOperationException(sprintf('La operación no es de ningún tipo.'
-                    .' Error en el caso %s', $caseNumber));
+                . ' Error en el caso %s', $caseNumber));
         }
 
         return true;
@@ -96,8 +96,8 @@ class DataPlainDriver implements DataDriverInterface
             $infoCase = explode(' ', $lines[$indexCase]);
             $this->isValidFormatInfoCase($infoCase, $caseNumber);
 
-            $matrixSize = $infoCase[0];
-            $numberOperations = $infoCase[1];
+            $matrixSize = (int)$infoCase[0];
+            $numberOperations = (int)$infoCase[1];
 
             $array['cases'][$caseNumber] = [
                 'case_number' => intval($caseNumber),
@@ -106,6 +106,10 @@ class DataPlainDriver implements DataDriverInterface
             ];
 
             for ($operation = $indexCase + 1; $operation <= ($indexCase + $numberOperations); ++$operation) {
+                if (!isset($lines[$operation])) {
+                    break;
+                }
+
                 $infoOperation = explode(' ', $lines[$operation]);
 
                 $this->isValidFormatInfoOperation($infoOperation, $caseNumber);

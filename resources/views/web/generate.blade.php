@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('content')
-{!! Form::open(['method' => 'POST', 'route' => 'public.cube.generator.execute']) !!}
+{!! Form::open(['method' => 'POST', 'route' => 'web.cube.generator.execute']) !!}
 
 {!! Field::textarea('cases') !!}                    
 

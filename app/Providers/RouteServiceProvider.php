@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        $this->mapPublicRoutes();
+//        $this->mapPublicRoutes();
 
         $this->mapAuthRoutes();
 
@@ -47,34 +47,26 @@ class RouteServiceProvider extends ServiceProvider
     }
 
 
-    protected function mapPublicRoutes()
-    {
-        Route::group([
-            'middleware' => 'web',
-            'namespace' => $this->namespace,
-        ], function ($router) {
-            require base_path('routes/public.php');
-        });
-    }
+//    protected function mapPublicRoutes()
+//    {
+//        Route::middleware('web')
+//            ->namespace($this->namespace)
+//            ->group(base_path('routes/public.php'));
+//    }
 
     protected function mapGuestRoutes()
     {
-        Route::group([
-            'middleware' => ['web', 'guest'],
-            'namespace' => $this->namespace,
-        ], function ($router) {
-            require base_path('routes/guest.php');
-        });
+        Route::prefix('guest')
+            ->middleware(['web', 'guest'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/guest.php'));
     }
 
     protected function mapAuthRoutes()
     {
-        Route::group([
-            'middleware' => ['web', 'auth'],
-            'namespace' => $this->namespace,
-        ], function ($router) {
-            require base_path('routes/auth.php');
-        });
+        Route::middleware(['web', 'auth'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/auth.php'));
     }
 
 
@@ -88,8 +80,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**
