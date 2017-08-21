@@ -65,16 +65,8 @@ class GeneratePlainController extends Controller
 
             $test =  $this->testRepository->create($response['T'], $user);
 
-//            $test = auth()->user()->createTest([
-//                'size' => $response['T'],
-//            ]);
-
             foreach ($response['cases'] as $case) {
                 $cube =  $this->cubeRepository->create($test, $case['matrix_size'], $case['number_operations']);
-//                $cube = $test->createCube([
-//                    'matrix_size' => $case['matrix_size'],
-//                    'number_operations' => $case['number_operations'],
-//                ]);
 
                 foreach ($case['operation'] as $operation) {
                     $cube->createOperation($operation);
